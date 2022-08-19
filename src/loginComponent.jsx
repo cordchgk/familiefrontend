@@ -1,10 +1,5 @@
 import React from 'react';
 import Cookies from 'universal-cookie';
-import { Calendar, momentLocalizer } from 'react-big-calendar'
-import moment from 'moment'
-import 'react-big-calendar/lib/sass/styles.scss';
-import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
-import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 
 class LoginComponent extends React.Component {
 
@@ -17,6 +12,10 @@ class LoginComponent extends React.Component {
             api: "", user: "", email: "", password: "",
 
             response: ""
+        };
+
+        this.user = {
+            user: ""
         };
 
 
@@ -46,8 +45,33 @@ class LoginComponent extends React.Component {
             cookies.set('apitoken', apitoken, {path: '/'}, {secure: true, sameSite: 'none'});
 
         }
-        this.setState({api: apitoken});
 
+
+    }
+
+
+    async getUser() {
+        const cookies = new Cookies();
+
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Expose-Headers': '*',
+                'apitoken': cookies.get('apitoken')
+            },
+
+
+        };
+        const response = await fetch('http://localhost:8080/rest/user/getByToken', requestOptions);
+
+
+        const responseJson = await response.json();
+
+        const u = responseJson.firstname + " " + responseJson.surname;
+
+        this.setState({user: u});
 
     }
 
@@ -64,23 +88,17 @@ class LoginComponent extends React.Component {
 
     }
 
-
+    componentDidMount() {
+        this.getUser();
+    }
 
 
     render() {
 
-        const localizer = momentLocalizer(moment) // or globalizeLocalizer
-
-
-        const DnDCalendar = withDragAndDrop(Calendar)
-
-        /* ... */
-
-
 
         const cookies = new Cookies();
         const apitoken = cookies.get("apitoken");
-        console.log(apitoken);
+
 
         const handleSubmit = event => {
             event.preventDefault();
@@ -88,13 +106,13 @@ class LoginComponent extends React.Component {
             this.login();
         };
         if (apitoken != null) {
-            this.state.api = apitoken;
-            return (
-                <DnDCalendar
-                    localizer={localizer}
-                    draggableAccessor={(event) => true}
-                    style={{height:500}}
-                />
+          
+            const u = this.state.user;
+
+            return (<div>
+                    User: {u}
+                </div>
+
             )
         } else {
             return (<div className="card text-center m-3">
