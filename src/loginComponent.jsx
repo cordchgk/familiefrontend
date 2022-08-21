@@ -1,57 +1,21 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Cookies from 'universal-cookie';
-
-class LoginComponent extends React.Component {
-
-
-    constructor(props) {
-        super(props);
+import './App.css';
+import './login.css';
 
 
-        this.state = {
-            api: "", user: "", email: "", password: "",
-
-            response: ""
-        };
-
-        this.user = {
-            user: ""
-        };
+export default function LoginComponent() {
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
+    const [user, setUser] = useState();
 
 
-    }
-
-    async login() {
-        const cookies = new Cookies();
-        const e = this.state.email;
-        const p = this.state.password;
+    const cookies = new Cookies();
+    const apitoken = cookies.get("apitoken");
 
 
-        const requestOptions = {
-            method: 'POST', headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Expose-Headers': '*'},
+    async function getUser() {
 
-            body: JSON.stringify({email: e, password: p})
-        };
-        const response = await fetch('http://localhost:8080/rest/user/login', requestOptions);
-
-
-        const responseJson = await response.json();
-
-        const apitoken = response.headers.get("apitoken");
-
-        if (apitoken != null) {
-
-
-            cookies.set('apitoken', apitoken, {path: '/'}, {secure: true, sameSite: 'none'});
-
-        }
-
-
-    }
-
-
-    async getUser() {
-        const cookies = new Cookies();
 
         const requestOptions = {
             method: 'GET',
@@ -71,73 +35,80 @@ class LoginComponent extends React.Component {
 
         const u = responseJson.firstname + " " + responseJson.surname;
 
-        this.setState({user: u});
+        setUser(u);
 
     }
 
-
-    setEmail(v) {
-
-        this.state.email = v;
-
-    }
-
-
-    setPassword(v) {
-        this.state.password = v;
-
-    }
-
-    componentDidMount() {
-        this.getUser();
-    }
-
-
-    render() {
-
-
+    async function login() {
         const cookies = new Cookies();
-        const apitoken = cookies.get("apitoken");
+        const requestOptions = {
+            method: 'POST', headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Expose-Headers': '*'},
 
-
-        const handleSubmit = event => {
-            event.preventDefault();
-
-            this.login();
+            body: JSON.stringify({email: email, password: password})
         };
+        const response = await fetch('http://localhost:8080/rest/user/login', requestOptions);
+
+
+        const apitoken = response.headers.get("apitoken");
+
         if (apitoken != null) {
-          
-            const u = this.state.user;
-
-            return (<div>
-                    User: {u}
-                </div>
-
-            )
-        } else {
-            return (<div className="card text-center m-3">
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        Name:
-                        <input type="text" name="email"
-                               onChange={e => this.setEmail(e.target.value)}/>
-                    </label>
-                    <label>
-                        Password:
-                        <input type="secret" name="password"
-                               onChange={e => this.setPassword(e.target.value)}/>
-                    </label>
-                    <button type="submit">Login</button>
 
 
-                </form>
+            cookies.set('apitoken', apitoken, {path: '/'}, {secure: true, sameSite: 'None'});
+            window.location.reload();
 
 
-            </div>);
         }
 
 
     }
+
+
+    useEffect(() => {
+        if (apitoken !== undefined) {
+            getUser()
+        }
+
+    }, []);
+
+    const handleSubmit = event => {
+        event.preventDefault();
+
+        login();
+
+    };
+
+
+    if (apitoken != null & apitoken !== "" && apitoken !== undefined) {
+
+
+        return (<div className="login">
+            User: {user}
+        </div>)
+
+    } else {
+        return (<div className="login">
+            <form onSubmit={handleSubmit}>
+                <label>
+                    Name:
+                    <input type="text" name="email"
+                           onChange={e => setEmail(e.target.value)}/>
+                </label>
+                <label>
+                    Password:
+                    <input type="password" name="password"
+                           onChange={e => setPassword(e.target.value)}/>
+                </label>
+
+                <button type="submit">Login</button>
+
+            </form>
+        </div>);
+    }
+
+
 }
 
-export {LoginComponent};
+export {
+    LoginComponent
+};

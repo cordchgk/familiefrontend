@@ -1,112 +1,85 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Cookies from 'universal-cookie';
-
-class CreateUserComponent extends React.Component {
-
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: "", password: "",firstname : "",surname : ""
+import './login.css';
+import {BrowserRouter as Router, Link, use, useNavigate} from 'react-router-dom';
 
 
-        };
+export default function CreateUserComponent() {
 
-    }
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
+    const [firstname, setFirstname] = useState();
+    const [surname, setSurname] = useState();
+    const navigate = useNavigate();
 
-    async createUser() {
-        const cookies = new Cookies();
-        const e = this.state.email;
-        const p = this.state.password;
-        const f = this.state.firstname;
-        const s = this.state.surname;
+    useEffect(() => {
+
+
+    }, []);
+
+
+    async function createUser() {
 
 
         const requestOptions = {
             method: 'POST', headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Expose-Headers': '*'},
 
-            body: JSON.stringify({email: e, password: p, firstname: f, surname: s})
+            body: JSON.stringify({email: email, password: password, firstname: firstname, surname: surname})
         };
         const response = await fetch('http://localhost:8080/rest/user/createUser', requestOptions);
 
 
-        const responseJson = await response.json();
-        console.log(responseJson);
+
 
 
     }
 
 
-    setEmail(v) {
 
-        this.state.email = v;
+    async function handleSubmit(event) {
+        event.preventDefault();
 
-    }
+        await createUser();
+        navigate("/login");
 
-
-    setPassword(v) {
-        this.state.password = v;
-
-    }
-
-    setFirstname(v) {
-        this.state.firstname = v;
-
-    }
-
-    setSurname(v) {
-        this.state.surname = v;
-
-    }
-
-    componentDidMount() {
-
-    }
+    };
 
 
-    render() {
+    return (<div className="login">
+        <form onSubmit={handleSubmit}>
+            <label>
+                Name:
+                <input type="text" name="email"
+                       onChange={e => setEmail(e.target.value)}/>
+            </label>
+            <label>
+                Password:
+                <input type="password" name="password"
+                       onChange={e => setPassword(e.target.value)}/>
+            </label>
+            <label>
+                Firstname:
+                <input type="secret" name="password"
+                       onChange={e => setFirstname(e.target.value)}/>
+            </label>
+            <label>
+                Surname:
+                <input type="secret" name="password"
+                       onChange={e => setSurname(e.target.value)}/>
+            </label>
 
 
+            {/* eslint-disable-next-line no-restricted-globals */}
+            <button type="submit" onClick={() => {
+                window.location.href = "http://localhost:3000/login"
+            }}>Create
+            </button>
 
 
-
-        const handleSubmit = event => {
-            event.preventDefault();
-
-            this.createUser();
-        };
-
-            return (<div className="card text-center m-3">
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        Name:
-                        <input type="text" name="email"
-                               onChange={e => this.setEmail(e.target.value)}/>
-                    </label>
-                    <label>
-                        Password:
-                        <input type="secret" name="password"
-                               onChange={e => this.setPassword(e.target.value)}/>
-                    </label>
-                    <label>
-                        Firstname:
-                        <input type="secret" name="password"
-                               onChange={e => this.setFirstname(e.target.value)}/>
-                    </label>
-                    <label>
-                        Surname:
-                        <input type="secret" name="password"
-                               onChange={e => this.setSurname(e.target.value)}/>
-                    </label>
-                    <button type="submit">Create</button>
+        </form>
 
 
-                </form>
-
-
-            </div>);
-        }
-
+    </div>);
 
 
 }

@@ -2,29 +2,31 @@ import './App.css';
 import {LoginComponent} from "./loginComponent";
 import {CreateUserComponent} from "./createUserComponent";
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import {HeaderComponent} from "./HeaderComponent";
 
-const App = () => {
-    return <Router>[...]</Router>;
-};
+
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+} from "react-router-dom";
 
 
 function App() {
     return (
 
-        <div className="App">
-            <header className="App-header">
+        <BrowserRouter>
+            <HeaderComponent/>
+            <main>
+                <Routes>
 
-                <LoginComponent></LoginComponent>
-                <CreateUserComponent></CreateUserComponent>
-            </header>
-        </div>
+                    <Route path="/login" element={<LoginComponent/>}/>
+                    <Route path="/createuser" element={<CreateUserComponent/>}/>
+                </Routes>
+            </main>
+        </BrowserRouter>
     );
 }
-
-
-
 
 
 export default App;
