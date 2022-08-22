@@ -87,7 +87,7 @@ export default function LoginComponent() {
         </div>)
 
     } else {
-        return (<div className="login">
+        return (<div>
             <form onSubmit={handleSubmit}>
                 <label>
                     Name:

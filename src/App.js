@@ -3,6 +3,7 @@ import {LoginComponent} from "./loginComponent";
 import {CreateUserComponent} from "./createUserComponent";
 import React from 'react';
 import {HeaderComponent} from "./HeaderComponent";
+import {GroupComponent} from "./GroupComponent";
 
 
 import {
@@ -17,6 +18,7 @@ function App() {
 
         <BrowserRouter>
             <HeaderComponent/>
+            <GroupComponent/>
             <main>
                 <Routes>
 

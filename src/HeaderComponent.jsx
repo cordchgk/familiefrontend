@@ -2,16 +2,15 @@ import React, {useState, useEffect} from 'react';
 import Cookies from 'universal-cookie';
 
 import './header.css';
+import LoginComponent from "./loginComponent";
 
 export default function HeaderComponent() {
 
     const [user, setUser] = useState();
     const cookies = new Cookies();
     const apitoken = cookies.get("apitoken");
-    let us;
 
     async function getUser() {
-
 
         const requestOptions = {
             method: 'GET',
@@ -26,6 +25,7 @@ export default function HeaderComponent() {
         const response = await fetch('http://localhost:8080/rest/user/getByToken', requestOptions);
 
         const responseJson = await response.json();
+
 
         const u = responseJson.firstname + " " + responseJson.surname;
 
@@ -68,9 +68,12 @@ export default function HeaderComponent() {
     if (apitoken != null & apitoken !== "" & apitoken !== undefined) {
 
         return (<div className="header">
-                User: {user}
+                <div style={{float: "left", display: "inline-block"}}>
+                    {user}
+                </div>
 
-                <div>
+
+                <div style={{float: "right", display: "inline-block"}}>
                     <form onSubmit={handleSubmit}>
                         <button type="submit">
                             Logout
@@ -82,7 +85,7 @@ export default function HeaderComponent() {
         )
     } else {
         return (<div className="header">
-
+          <LoginComponent/>
 
         </div>);
     }
