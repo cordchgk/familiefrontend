@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useNavigate} from "react-router-dom";
 import Cookies from 'universal-cookie';
 import './App.css';
 import './login.css';
@@ -8,6 +9,7 @@ export default function LoginComponent() {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [user, setUser] = useState();
+    const navigate = useNavigate();
 
 
     const cookies = new Cookies();
@@ -55,6 +57,7 @@ export default function LoginComponent() {
 
 
             cookies.set('apitoken', apitoken, {path: '/'}, {secure: true, sameSite: 'None'});
+            navigate("/groups");
             window.location.reload();
 
 
@@ -69,7 +72,7 @@ export default function LoginComponent() {
             getUser()
         }
 
-    }, []);
+    }, );
 
     const handleSubmit = event => {
         event.preventDefault();

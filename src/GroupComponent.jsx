@@ -43,7 +43,7 @@ export default function GroupComponent() {
             console.log(groups);
         }
 
-    }, []);
+    }, );
 
     if (apitoken != null & apitoken !== "" && apitoken !== undefined) {
 
