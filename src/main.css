@@ -8,3 +8,10 @@
     font-size: calc(10px + 2vmin);
     color: white;
 }
+
+.group-center-div{
+    width: 100%;
+    overflow: hidden;
+    align-content: center;
+
+}

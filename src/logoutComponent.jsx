@@ -34,7 +34,7 @@ class LogoutComponent extends React.Component {
 
             body: JSON.stringify({email: e, password: p})
         };
-        const response = await fetch('http://localhost:8080/rest/user/login', requestOptions);
+        const response = await fetch('http://localhost:9000/rest/user/login', requestOptions);
 
 
         const apitoken = response.headers.get("apitoken");
@@ -64,7 +64,7 @@ class LogoutComponent extends React.Component {
 
 
         };
-        const response = await fetch('http://localhost:8080/rest/user/getByToken', requestOptions);
+        const response = await fetch('http://localhost:9000/rest/user/getByToken', requestOptions);
 
 
         const responseJson = await response.json();

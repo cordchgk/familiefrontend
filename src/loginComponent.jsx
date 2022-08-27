@@ -30,7 +30,7 @@ export default function LoginComponent() {
 
 
         };
-        const response = await fetch('http://localhost:8080/rest/user/getByToken', requestOptions);
+        const response = await fetch('http://localhost:9000/rest/user/getByToken', requestOptions);
 
 
         const responseJson = await response.json();
@@ -48,7 +48,7 @@ export default function LoginComponent() {
 
             body: JSON.stringify({email: email, password: password})
         };
-        const response = await fetch('http://localhost:8080/rest/user/login', requestOptions);
+        const response = await fetch('http://localhost:9000/rest/user/login', requestOptions);
 
 
         const apitoken = response.headers.get("apitoken");
